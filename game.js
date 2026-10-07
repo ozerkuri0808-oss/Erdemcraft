@@ -1444,6 +1444,7 @@ try {
 }
 
 camera.position.y=getGroundY(0,16)+6;
+window.ERDEMCRAFT_BOOT.gameStarted = true;
 
 addEventListener("resize",()=>{
   camera.aspect=innerWidth/innerHeight;
