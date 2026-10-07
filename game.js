@@ -412,8 +412,12 @@ function mobGround(mob) {
 }
 
 function mobCanStep(mob, x, z) {
-  const ground = getGroundY(x,z);
-  const head = world.get(key(Math.round(x), Math.floor(ground+1.1), Math.round(z)));
+  const currentGround = getGroundY(mob.group.position.x, mob.group.position.z);
+  const nextGround = getGroundY(x,z);
+  const head = world.get(key(Math.round(x), Math.floor(nextGround+1.1), Math.round(z)));
+
+  // Mobs can walk down into pits, but they cannot instantly climb a wall taller than one block.
+  if (nextGround - currentGround > 1.15) return false;
   return !head;
 }
 
