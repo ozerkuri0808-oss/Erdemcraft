@@ -30,6 +30,19 @@ let lastPortalTime = -10;
 
 const keys = Object.create(null);
 const clock = new THREE.Clock();
+let runtimeErrorShown = false;
+
+function reportRuntimeError(error) {
+  if (runtimeErrorShown) return;
+  runtimeErrorShown = true;
+  const message = error?.message || String(error);
+  const status = document.getElementById("status");
+  if (status) status.textContent = "⚠️ Beta güvenli mod: " + message.slice(0, 90);
+  console.error("Erdemcraft runtime error:", error);
+}
+
+window.addEventListener("error", e => reportRuntimeError(e.error || e.message));
+window.addEventListener("unhandledrejection", e => reportRuntimeError(e.reason));
 
 function resetKeys() {
   for (const k of Object.keys(keys)) delete keys[k];
@@ -1391,13 +1404,13 @@ function animate(){
   requestAnimationFrame(animate);
   const dt=Math.min(clock.getDelta(),.05);
   elapsed+=dt;
-  updatePlayer(dt);
-  updateMobs(dt);
-  updateProjectiles(dt);
-  updateParticles(dt);
-  updateSky();
-  updateSelection();
-  updateHUD(dt);
+  try { updatePlayer(dt); } catch(e) { reportRuntimeError(e); }
+  try { updateMobs(dt); } catch(e) { reportRuntimeError(e); }
+  try { updateProjectiles(dt); } catch(e) { reportRuntimeError(e); }
+  try { updateParticles(dt); } catch(e) { reportRuntimeError(e); }
+  try { updateSky(); } catch(e) { reportRuntimeError(e); }
+  try { updateSelection(); } catch(e) { reportRuntimeError(e); }
+  try { updateHUD(dt); } catch(e) { reportRuntimeError(e); }
   renderer.render(scene,camera);
 }
 
@@ -1407,15 +1420,30 @@ document.getElementById("save-btn").onclick=()=>saveWorld();
 document.getElementById("load-btn").onclick=()=>loadWorld();
 document.getElementById("reset-btn").onclick=()=>resetWorld();
 
-buildWorld();
-spawnMob("zombie",new THREE.Vector3(-3,terrainY(-3,-7),-7));
-spawnMob("skeleton",new THREE.Vector3(3,terrainY(3,-7),-7));
-spawnMob("creeper",new THREE.Vector3(0,terrainY(0,-4),-4));
-spawnMob("slime",new THREE.Vector3(-4,terrainY(-4,-3),-3));
-spawnMob("sheep",new THREE.Vector3(-5,terrainY(-5,3),3));
-spawnMob("cow",new THREE.Vector3(5,terrainY(5,4),4));
-spawnMob("pillager",new THREE.Vector3(8,terrainY(8,-5),-5));
-spawnMob("spider",new THREE.Vector3(-8,terrainY(-8,-5),-5));
+function buildEmergencyWorld(){
+  clearWorld();
+  for(let x=-16;x<=16;x++) for(let z=-16;z<=16;z++){
+    addBlock(x,0,z,"bedrock");
+    addBlock(x,1,z,"stone");
+    addBlock(x,2,z,"grass");
+  }
+  for(let x=-3;x<=3;x++) for(let z=0;z<=6;z++) addBlock(x,3,z,"oak_planks");
+}
+
+try {
+  buildWorld();
+  spawnMob("zombie",new THREE.Vector3(-3,terrainY(-3,-7),-7));
+  spawnMob("skeleton",new THREE.Vector3(3,terrainY(3,-7),-7));
+  spawnMob("creeper",new THREE.Vector3(0,terrainY(0,-4),-4));
+  spawnMob("slime",new THREE.Vector3(-4,terrainY(-4,-3),-3));
+  spawnMob("sheep",new THREE.Vector3(-5,terrainY(-5,3),3));
+  spawnMob("cow",new THREE.Vector3(5,terrainY(5,4),4));
+  spawnMob("pillager",new THREE.Vector3(8,terrainY(8,-5),-5));
+  spawnMob("spider",new THREE.Vector3(-8,terrainY(-8,-5),-5));
+} catch (error) {
+  reportRuntimeError(error);
+  buildEmergencyWorld();
+}
 
 camera.position.y=getGroundY(0,16)+6;
 
