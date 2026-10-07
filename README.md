@@ -1,28 +1,38 @@
 # ⛏️ Erdemcraft
 
-**Erdemcraft Creative Beta** — özgün içeriklerle hazırlanmış, tarayıcıda çalışan voxel sandbox.
+**Erdemcraft Creative Beta 2** — tarayıcıda çalışan, özgün bir voxel sandbox.
 
-## 🌍 Beta'da neler var?
+## 🌍 Beta 2
 
-- Büyük prosedürel voxel dünya, ağaçlar, göl, yollar ve gece/gündüz döngüsü
-- Creative uçuş sistemi ve serbest kamera
-- Blok kırma, blok koyma ve yerleştirme önizlemesi
-- Gelişmiş Creative envanteri + hotbar
-- 5 farklı yaratık: zombi, iskelet, koyun, inek, slime
-- Hostile mob AI, mob-vs-mob çatışmaları ve iskelet menzilli saldırısı
-- Oyuncunun moblara geri itme etkili Creative saldırısı
-- Merkezi arena ve derin çukur
-- Sağ tık basılı tutulduğunda hızlı spawn egg sistemi
-- Darbe parçacıkları, HP barları, yumuşak animasyonlar ve gölgeler
-- Dünya kaydet/yükle + yeni dünya
-- GitHub Pages ile otomatik yayın
+- Kamera hareketi düzeltilmiş: W ileri, S geri, A/D yan hareket
+- Creative uçuş, serbest kamera ve fare kilidi
+- 50+ blok çeşidi: yapı, doğa, maden, Nether/End temalı ve dekoratif bloklar
+- Geniş spawn egg kütüphanesi: klasik düşmanlar, hayvanlar, uçanlar, boss'lar ve yeni nesil mob varyantları
+- Mob AI: düşmanların birbirini hedeflemesi, pasif mobların kaçması, uçan moblar ve menzilli enerji saldırıları
+- Mob animasyonları, HP barları, parçacıklar ve geri itme
+- Nether ve End temalı çalışan portal çiftleri
+- Göl, ağaçlar, arena çukuru, ışıklandırma ve gece/gündüz
+- Creative envanter + hotbar, mouse wheel seçim
+- Dünya kaydet/yükle ve yeni dünya
+
+Güncel Minecraft'ta Copper Golem ve Happy Ghast gibi yeni moblar; Nautilus ve Zombie Nautilus gibi Mounts of Mayhem içerikleri bulunuyor. Erdemcraft bunların adlarını ve temel fikirlerini referans alarak **özgün, basitleştirilmiş modeller** kullanır; Minecraft'ın kaynak kodunu veya orijinal varlıklarını kullanmaz.
 
 ## 🎮 Kontroller
 
-**WASD** hareket · **Space** yukarı uç · **Shift** aşağı/in hızlı hareket · **Sol tık** blok kır / mobu geri it · **Sağ tık** blok koy / spawn egg · **E** envanter · **1–9 / mouse wheel** seçim · **P** kaydet · **O** yükle · **R** yeni dünya · **ESC** fareyi bırak
+**WASD:** hareket  
+**Space:** yukarı uç  
+**Shift:** aşağı uç / hızlı hareket  
+**Sol tık:** blok kır / mobu geri it  
+**Sağ tık:** blok koy / spawn egg / portal kur  
+**E:** Creative envanter  
+**1–9 / Mouse Wheel:** seçim  
+**P:** kaydet  
+**O:** yükle  
+**R:** yeni dünya  
+**ESC:** fareyi serbest bırak
 
-## 🧪 Beta notu
+## 🧪 Özgün içerik
 
-Oyun Minecraft'ın dosyalarını, modellerini veya özel kaynaklarını kullanmaz. Erdemcraft tamamen kendi dünya, blok, mob ve arayüz koduyla geliştirilen özgün bir tarayıcı oyunudur.
+Oyun Minecraft dosyalarını, modellerini veya özel kaynaklarını kopyalamaz. Dünya, bloklar, arayüz, mob modelleri, AI ve portal sistemi Erdemcraft için yazılmış özgün kodla oluşturulur.
 
-Oyunu açtıktan sonra yeni sürüm görünmezse **Ctrl+F5** ile sayfayı yenilemek önerilir.
+Yeni sürüm görünmezse **Ctrl+F5** önerilir.
