@@ -218,6 +218,17 @@ const BLOCKS = {
   prismarine:{name:"Prismarine",icon:"🟦",base:"#55a6a0",accent:"#3a7d79"},
   sea_lantern:{name:"Deniz Feneri",icon:"💡",base:"#94ddd6",accent:"#d0fff2",emissive:"#5dcfc1"},
   mossy_brick:{name:"Yosunlu Tuğla",icon:"🧱",base:"#68795f",accent:"#405f42"},
+  dried_ghast:{name:"Kuru Ghast",icon:"👻",base:"#d3c4b8",accent:"#a89485"},
+  copper_ore:{name:"Bakır Cevheri",icon:"🟧",base:"#8e806e",accent:"#b96e4e"},
+  copper_block:{name:"Bakır Blok",icon:"🟧",base:"#b86f4f",accent:"#854d38"},
+  copper_chest:{name:"Bakır Sandık",icon:"🟧",base:"#a66b4f",accent:"#704431"},
+  shelf:{name:"Raf",icon:"📚",base:"#93613b",accent:"#694327"},
+  bone_block:{name:"Kemik Blok",icon:"⬜",base:"#ddd7c8",accent:"#bfb7a6"},
+  tuff:{name:"Tüf",icon:"🟫",base:"#77786f",accent:"#5e6058"},
+  calcite:{name:"Kalsit",icon:"⬜",base:"#d9ddd9",accent:"#b8bfba"},
+  dripstone:{name:"Damlataş",icon:"🔻",base:"#8b6857",accent:"#67493d"},
+  pointed_dripstone:{name:"Sivri Damlataş",icon:"🔻",base:"#9b6d56",accent:"#72503f"},
+  amethyst_block:{name:"Ametist Bloğu",icon:"💜",base:"#7659a6",accent:"#583d7e",emissive:"#2b1848"},
   portal_nether:{name:"Nether Portalı",icon:"🟪",base:"#5e2a8f",accent:"#b56cff",transparent:true,opacity:.5,emissive:"#4f1985"},
   portal_end:{name:"End Portalı",icon:"🟩",base:"#153a37",accent:"#54c4ad",transparent:true,opacity:.65,emissive:"#173f38"}
 };
@@ -300,7 +311,7 @@ const EGGS = {
   witch:{name:"Cadı Yumurtası",icon:"🧙",color:0x6e496f,hostile:true,hp:26,damage:6,speed:1.15,ranged:true},
   piglin:{name:"Piglin Yumurtası",icon:"🐗",color:0x9b6b62,hostile:true,hp:32,damage:7,speed:1.65,ranged:false},
   zombified_piglin:{name:"Zombileşmiş Piglin Yumurtası",icon:"🐗",color:0x8d8d57,hostile:true,hp:32,damage:7,speed:1.65},
-  pillager:{name:"Pillager Yumurtası",icon:"🏹",color:0x6f6861,hostile:true,hp:28,damage:6,speed:1.55,ranged:true},
+  pillager:{name:"Pillager Yumurtası",icon:"✨",color:0x6f6861,hostile:true,hp:28,damage:6,speed:1.55,ranged:true},
   vindicator:{name:"Vindicator Yumurtası",icon:"🪓",color:0x72716b,hostile:true,hp:34,damage:8,speed:1.8},
   evoker:{name:"Evoker Yumurtası",icon:"🔮",color:0x72526c,hostile:true,hp:32,damage:6,speed:1.2,ranged:true},
   guardian:{name:"Guardian Yumurtası",icon:"🐡",color:0x4d9990,hostile:true,hp:30,damage:7,speed:1.2,flying:true,ranged:true},
@@ -336,13 +347,41 @@ const EGGS = {
   sniffer:{name:"Sniffer Yumurtası",icon:"🦕",color:0x6c5748,hostile:false,hp:50,damage:0,speed:.65,animal:true},
   villager:{name:"Köylü Yumurtası",icon:"🧑‍🌾",color:0x8c6b58,hostile:false,hp:30,damage:0,speed:1.0,villager:true},
   iron_golem:{name:"Demir Golem Yumurtası",icon:"🤖",color:0xbec5bf,hostile:false,hp:100,damage:0,speed:.7,golem:true},
-  snow_golem:{name:"Kar Golemi Yumurtası",icon:"⛄",color:0xeef7ff,hostile:false,hp:30,damage:0,speed:.9,golem:true}
+  snow_golem:{name:"Kar Golemi Yumurtası",icon:"⛄",color:0xeef7ff,hostile:false,hp:30,damage:0,speed:.9,golem:true},
+  bat:{name:"Yarasa Yumurtası",icon:"🦇",color:0x45404c,hostile:false,hp:8,damage:0,speed:2.2,animal:true,flying:true},
+  parrot:{name:"Papağan Yumurtası",icon:"🦜",color:0x5b86c7,hostile:false,hp:10,damage:0,speed:1.9,animal:true,flying:true},
+  ocelot:{name:"Oselot Yumurtası",icon:"🐆",color:0xd3a960,hostile:false,hp:18,damage:0,speed:1.8,animal:true},
+  mooshroom:{name:"Mooshroom Yumurtası",icon:"🍄",color:0xa84545,hostile:false,hp:24,damage:0,speed:.8,animal:true},
+  glow_squid:{name:"Parlayan Mürekkep Balığı Yumurtası",icon:"🦑",color:0x5a8e97,hostile:false,hp:18,damage:0,speed:1.0,animal:true,flying:true},
+  cod:{name:"Morina Yumurtası",icon:"🐟",color:0xb5a681,hostile:false,hp:8,damage:0,speed:1.2,animal:true,flying:true},
+  salmon:{name:"Somon Yumurtası",icon:"🐟",color:0xd77662,hostile:false,hp:10,damage:0,speed:1.25,animal:true,flying:true},
+  pufferfish:{name:"Balon Balığı Yumurtası",icon:"🐡",color:0xd5b34d,hostile:false,hp:10,damage:0,speed:.9,animal:true,flying:true},
+  tropical_fish:{name:"Tropikal Balık Yumurtası",icon:"🐠",color:0x4eb6cb,hostile:false,hp:8,damage:0,speed:1.45,animal:true,flying:true},
+  tadpole:{name:"İribaş Yumurtası",icon:"🟢",color:0x556d3f,hostile:false,hp:6,damage:0,speed:1.1,animal:true,flying:true},
+  armadillo:{name:"Armadillo Yumurtası",icon:"🦔",color:0x8d725c,hostile:false,hp:18,damage:0,speed:.7,animal:true},
+  allay:{name:"Allay Yumurtası",icon:"🧚",color:0x69c9db,hostile:false,hp:20,damage:0,speed:1.8,animal:true,flying:true},
+  ravager:{name:"Ravager Yumurtası",icon:"🐗",color:0x62605a,hostile:true,hp:80,damage:13,speed:1.1},
+  piglin_brute:{name:"Piglin Brute Yumurtası",icon:"🐗",color:0x694d4b,hostile:true,hp:55,damage:11,speed:1.55},
+  hoglin:{name:"Hoglin Yumurtası",icon:"🐗",color:0x70484b,hostile:true,hp:45,damage:10,speed:1.45},
+  zoglin:{name:"Zoglin Yumurtası",icon:"🐗",color:0x6c4b5e,hostile:true,hp:45,damage:10,speed:1.45},
+  strider:{name:"Strider Yumurtası",icon:"🐾",color:0x8f424e,hostile:false,hp:30,damage:0,speed:1.0,animal:true},
+  breeze:{name:"Breeze Yumurtası",icon:"🌪️",color:0x91d1d4,hostile:true,hp:32,damage:6,speed:1.65,flying:true,ranged:true},
+  bogged:{name:"Bogged Yumurtası",icon:"✨",color:0x65795a,hostile:true,hp:20,damage:5,speed:1.5,ranged:true},
+  creaking:{name:"Creaking Yumurtası",icon:"🌲",color:0x6f766f,hostile:true,hp:36,damage:8,speed:1.35},
+  copper_golem:{name:"Bakır Golem Yumurtası",icon:"🤖",color:0xc07a54,hostile:false,hp:70,damage:0,speed:.75,golem:true},
+  happy_ghast:{name:"Happy Ghast Yumurtası",icon:"👻",color:0xf0eee8,hostile:false,hp:60,damage:0,speed:1.0,flying:true},
+  ghastling:{name:"Ghastling Yumurtası",icon:"👻",color:0xe2ded5,hostile:false,hp:20,damage:0,speed:1.3,flying:true},
+  nautilus:{name:"Nautilus Yumurtası",icon:"🐚",color:0xb28e72,hostile:false,hp:35,damage:0,speed:1.2,animal:true,flying:true},
+  zombie_nautilus:{name:"Zombi Nautilus Yumurtası",icon:"🐚",color:0x596b66,hostile:true,hp:38,damage:8,speed:1.2,flying:true},
+  zombie_horse:{name:"Zombi Atı Yumurtası",icon:"🐎",color:0x53615b,hostile:false,hp:34,damage:0,speed:1.35,animal:true},
+  camel_husk:{name:"Camel Husk Yumurtası",icon:"🐪",color:0x9b835f,hostile:false,hp:42,damage:0,speed:.95,animal:true},
+  parched:{name:"Parched Yumurtası",icon:"✨",color:0x9b886e,hostile:true,hp:24,damage:5,speed:1.45,ranged:true}
 };
 
 const ITEMS = [
   ...Object.keys(BLOCKS).map(id=>({id,kind:"block"})),
   {id:"push",kind:"tool",name:"Creative İtme",icon:"✋"},
-  {id:"bow",kind:"tool",name:"Creative Yay",icon:"🏹"},
+  {id:"energy",kind:"tool",name:"Enerji Asası",icon:"✨"},
   {id:"nether",kind:"portal",name:"Nether Portalı",icon:"🟪"},
   {id:"end",kind:"portal",name:"End Portalı",icon:"🟩"},
   ...Object.keys(EGGS).map(id=>({id,kind:"egg"}))
@@ -355,7 +394,7 @@ const hotbarItems = [
   {kind:"block",id:"oak_planks"},
   {kind:"block",id:"glass"},
   {kind:"tool",id:"push",name:"Creative İtme",icon:"✋"},
-  {kind:"tool",id:"bow",name:"Creative Yay",icon:"🏹"},
+  {kind:"tool",id:"energy",name:"Enerji Asası",icon:"✨"},
   {kind:"portal",id:"nether",name:"Nether Portalı",icon:"🟪"},
   {kind:"egg",id:"skeleton"}
 ];
@@ -738,9 +777,9 @@ function eye(g,x,y,z){
   m.position.set(x,y,z);g.add(m);
 }
 
-function addSimpleBow(g){
+function addEnergyCaster(g){
   const bow=new THREE.Group();
-  bow.userData.bow=true;
+  bow.userData.caster=true;
   const wood=new THREE.MeshLambertMaterial({color:0x8b5a34});
   const curveTop=new THREE.Mesh(new THREE.BoxGeometry(.08,.58,.08),wood);
   curveTop.rotation.z=-.38;curveTop.position.y=.28;
@@ -768,7 +807,7 @@ function makeHumanoid(type,color){
   for(const x of [-.2,.2]){
     const leg=part(new THREE.BoxGeometry(.24,.8,.24),limbColor);leg.position.set(x,.31,0);leg.userData.limb="leg";g.add(leg);legs.push(leg);
   }
-  if(["skeleton","stray","wither_skeleton","pillager","witch","evoker","piglin"].includes(type))addSimpleBow(g);
+  if(["skeleton","stray","wither_skeleton","pillager","witch","evoker","piglin","bogged","parched"].includes(type))addEnergyCaster(g);
   if(type==="villager"){
     const nose=part(new THREE.BoxGeometry(.16,.24,.2),0x9c735f);nose.position.set(0,1.68,.42);g.add(nose);
   }
@@ -873,7 +912,8 @@ function makeMobModel(type,color){
   if(["spider","cave_spider"].includes(type))return makeSpider(type,color);
   if(type==="creeper")return makeCreeper(color);
   if(["slime","magma_cube"].includes(type))return makeSlime(type,color);
-  if(EGGS[type]?.flying&&["blaze","ghast","phantom","guardian","elder_guardian","wither","ender_dragon"].includes(type))return makeFlying(type,color);
+  if(type==="ender_dragon")return makeDragon(color);
+  if(EGGS[type]?.flying)return makeFlying(type,color);
   if(EGGS[type]?.animal)return makeAnimal(type,color);
   if(EGGS[type]?.golem)return makeGolem(type,color);
   return makeHumanoid(type,color);
@@ -920,7 +960,7 @@ function spawnMob(type,pos){
   scene.add(g);
   entity.group=g;
   entity.parts=g.children.filter(o=>o.userData.limb);
-  entity.bow=g.children.find(o=>o.userData.bow)||null;
+  entity.caster=g.children.find(o=>o.userData.caster)||null;
   mobs.push(entity);
   for(const c of g.children)if(c.isMesh&&!c.userData.healthSprite)mobMeshes.push(c);
   attachHealthBar(entity);
@@ -973,12 +1013,12 @@ function damageMob(entity,amount,source="player",knock=new THREE.Vector3()){
   }
 }
 
-function shootArrow(owner,target){
+function shootEnergy(owner,target){
   const from=new THREE.Vector3(owner.group.position.x,owner.group.position.y+1.45,owner.group.position.z);
   const to=target.group.position.clone();to.y+=1;
   const dir=to.sub(from).normalize();
-  const mesh=new THREE.Mesh(new THREE.CylinderGeometry(.03,.03,.48,7),new THREE.MeshLambertMaterial({color:0x8c6538}));
-  mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),dir);
+  const mesh=new THREE.Mesh(new THREE.SphereGeometry(.11,10,10),new THREE.MeshBasicMaterial({color:0x7ef0db}));
+  mesh.scale.set(1.2,1.2,1.2);
   mesh.position.copy(from);
   scene.add(mesh);
   projectiles.push({mesh,dir,speed:13,life:1.7,owner});
@@ -1011,9 +1051,9 @@ function animateMob(entity,dt){
     if(limb.userData.limb==="arm")limb.rotation.x=entity.aiming?-.85:walk*.28;
     if(limb.userData.limb==="leg")limb.rotation.x=-walk*.28;
   }
-  if(entity.bow){
-    entity.bow.rotation.z=entity.aiming?-0.16:-0.06;
-    entity.bow.scale.y=entity.aiming?.92:1;
+  if(entity.caster){
+    entity.caster.rotation.z=entity.aiming?-0.16:-0.06;
+    entity.caster.scale.y=entity.aiming?.92:1;
     if(entity.shootAnim>0)entity.shootAnim=Math.max(0,entity.shootAnim-dt);
   }
   if(entity.type==="slime"||entity.type==="magma_cube"){
@@ -1069,7 +1109,7 @@ function updateMobs(dt){
       if(mob.ranged&&dist>3&&dist<14){
         mob.aiming=true;
         if(mob.attackCooldown<=0){
-          shootArrow(mob,target);
+          shootEnergy(mob,target);
           mob.attackCooldown=mob.type==="blaze"?1.05:.95;
           mob.shootAnim=.2;
         }
@@ -1183,7 +1223,7 @@ function performAction(button){
   if(button===0){
     if(target){
       const dir=new THREE.Vector3();camera.getWorldDirection(dir);dir.y=0;dir.normalize();
-      const amount=item.kind==="tool"&&item.id==="bow"?5:14;
+      const amount=item.kind==="tool"&&item.id==="energy"?5:14;
       damageMob(target,amount,"player",new THREE.Vector3(dir.x*5,3.8,dir.z*5));
       return;
     }
@@ -1213,11 +1253,11 @@ function performAction(button){
     }
 
     if(item.kind==="tool"){
-      if(item.id==="bow"&&target){
+      if(item.id==="energy"&&target){
         // Player bow has a simple visible shot.
         const fake={group:{position:camera.position.clone()},damage:8,type:"player"};
         shootArrow(fake,target);
-        showMessage("🏹 Ok atıldı!");
+        showMessage("✨ Enerji atıldı!");
       }
       return;
     }
