@@ -23,3 +23,6 @@ Minecraft'tan esinlenen, özgün içeriklerle hazırlanmış tarayıcı tabanlı
 - **1-9:** hotbar seçimi
 
 Oyun tarayıcı içinde çalışır ve harici Minecraft varlıkları kullanmaz.
+
+
+> Deployment refresh: GitHub Pages is configured through `.github/workflows/pages.yml`.
