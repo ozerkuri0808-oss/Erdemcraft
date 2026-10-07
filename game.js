@@ -168,7 +168,7 @@ const hotbarItems = [
   { kind:"block", id:"plank" },
   { kind:"block", id:"glass" },
   { kind:"block", id:"brick" },
-  { kind:"tool", id:"sword", name:"Creative Tokat", icon:"🗡️" },
+  { kind:"tool", id:"push", name:"Creative İtme", icon:"✋" },
   { kind:"egg", id:"zombie" }
 ];
 
@@ -503,7 +503,7 @@ function hitEntity() {
 function selectedLabel(item) {
   if (item.kind==="block") return BLOCKS[item.id];
   if (item.kind==="egg") return EGGS[item.id];
-  return {name:item.name || "Creative Tokat",icon:item.icon || "🗡️"};
+  return {name:item.name || "Creative İtme",icon:item.icon || "✋"};
 }
 
 let selected=0;
