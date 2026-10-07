@@ -81,22 +81,23 @@ const BLOCKS = {
 };
 
 const EGGS = {
-  zombie: { name:"Zombi Yumurtası", icon:"🧟", color:0x4c8c43, hostile:true },
-  skeleton: { name:"İskelet Yumurtası", icon:"💀", color:0xd7d1c3, hostile:true },
-  sheep: { name:"Koyun Yumurtası", icon:"🐑", color:0xe7e7e7, hostile:false },
-  cow: { name:"İnek Yumurtası", icon:"🐄", color:0x4d3d35, hostile:false }
+  zombie: { name:"Zombi Yumurtası", icon:"🧟", color:0x4c8c43, hostile:true, hp:30, damage:7, speed:1.8 },
+  skeleton: { name:"İskelet Yumurtası", icon:"💀", color:0xd7d1c3, hostile:true, hp:24, damage:5, speed:1.65 },
+  sheep: { name:"Koyun Yumurtası", icon:"🐑", color:0xe7e7e7, hostile:false, hp:18, damage:0, speed:.9 },
+  cow: { name:"İnek Yumurtası", icon:"🐄", color:0x4d3d35, hostile:false, hp:24, damage:0, speed:.75 },
+  slime: { name:"Slime Yumurtası", icon:"🟢", color:0x52d66d, hostile:true, hp:22, damage:6, speed:1.5 }
 };
 
 const ITEMS = [
   ...Object.keys(BLOCKS).map(id => ({ id, kind:"block", ...BLOCKS[id] })),
+  { id:"sword", kind:"tool", name:"Creative Kılıç", icon:"🗡️" },
   ...Object.keys(EGGS).map(id => ({ id, kind:"egg", ...EGGS[id] }))
 ];
 
 const hotbarItems = [
   {kind:"block", id:"grass"}, {kind:"block", id:"dirt"}, {kind:"block", id:"stone"},
-  {kind:"block", id:"wood"}, {kind:"block", id:"glass"},
-  {kind:"egg", id:"zombie"}, {kind:"egg", id:"skeleton"},
-  {kind:"egg", id:"sheep"}, {kind:"egg", id:"cow"}
+  {kind:"block", id:"wood"}, {kind:"block", id:"glass"}, {kind:"tool", id:"sword"},
+  {kind:"egg", id:"zombie"}, {kind:"egg", id:"skeleton"}, {kind:"egg", id:"slime"}
 ];
 
 const blockGeometry = new THREE.BoxGeometry(1,1,1);
@@ -181,6 +182,46 @@ function buildWorld() {
 
 buildWorld();
 
+function getGroundY(x, z) {
+  const cx = Math.round(x);
+  const cz = Math.round(z);
+  for (let y = 24; y >= 0; y--) {
+    const mesh = world.get(key(cx, y, cz));
+    if (mesh) return y + 1;
+  }
+  return 0;
+}
+
+function makeMobArena() {
+  const cx = 0, cz = -8, r = 5;
+
+  // Create a playable pit so mobs can fall into it and fight.
+  for (let x=cx-r; x<=cx+r; x++) {
+    for (let z=cz-r; z<=cz+r; z++) {
+      const top = getGroundY(x,z);
+      for (let y=top-1; y>=Math.max(1, top-3); y--) {
+        const mesh = world.get(key(x,y,z));
+        if (mesh) removeBlockMesh(mesh);
+      }
+    }
+  }
+
+  for (let x=cx-r-1; x<=cx+r+1; x++) {
+    for (const z of [cz-r-1, cz+r+1]) {
+      const gy=getGroundY(x,z);
+      addBlock(x,gy,z,"brick"); addBlock(x,gy+1,z,"brick");
+    }
+  }
+  for (let z=cz-r; z<=cz+r; z++) {
+    for (const x of [cx-r-1, cx+r+1]) {
+      const gy=getGroundY(x,z);
+      addBlock(x,gy,z,"brick"); addBlock(x,gy+1,z,"brick");
+    }
+  }
+}
+
+makeMobArena();
+
 const selection = new THREE.Mesh(
   new THREE.BoxGeometry(1.03,1.03,1.03),
   new THREE.MeshBasicMaterial({color:0xffffff, wireframe:true, transparent:true, opacity:.8})
@@ -220,7 +261,9 @@ function updateSelection() {
 
 let selected = 0;
 function itemLabel(item) {
-  return item.kind === "block" ? BLOCKS[item.id] : EGGS[item.id];
+  if (item.kind === "block") return BLOCKS[item.id];
+  if (item.kind === "tool") return {name:"Creative Kılıç",icon:"🗡️"};
+  return EGGS[item.id];
 }
 function renderHotbar() {
   const hotbar = document.getElementById("hotbar");
@@ -268,6 +311,8 @@ const keys = {};
 addEventListener("keydown", e => {
   keys[e.code] = true;
   if (e.code === "KeyE") { e.preventDefault(); toggleInventory(); }
+  if (e.code === "KeyP" && !controls.isLocked) saveWorld();
+  if (e.code === "KeyO" && !controls.isLocked) loadWorld();
   if (/Digit[1-9]/.test(e.code)) { selected = Number(e.code.slice(-1))-1; renderHotbar(); }
 });
 addEventListener("keyup", e => keys[e.code] = false);
@@ -289,21 +334,37 @@ function makeMobPart(geo, color, y) {
 
 function spawnMob(type, pos) {
   const def = EGGS[type];
-  if (!def) return;
+  if (!def) return null;
+  if (mobs.length >= 120) {
+    showMessage("⚠️ Mob limiti: 120");
+    return null;
+  }
+
   const entity = {
-    type, hp: 20, maxHp:20, hostile:def.hostile, speed:def.hostile?1.35:.75,
-    attackCooldown:0, wander:Math.random()*5, dead:false, group:null, target:null
+    type,
+    hp:def.hp, maxHp:def.hp, hostile:def.hostile,
+    speed:def.speed, damage:def.damage,
+    attackCooldown:Math.random()*.4,
+    wander:1+Math.random()*3,
+    dead:false, group:null, target:null,
+    vy:0
   };
+
   const g = new THREE.Group();
   g.position.copy(pos);
   g.userData.entity = entity;
+
   const color = def.color;
-  const body = makeMobPart(new THREE.BoxGeometry(.8,1.0,.6), color, .95);
+  const bodySize = type === "slime" ? [.95,.8,.95] : [.8,1,.6];
+  const bodyY = type === "slime" ? .5 : .95;
+  const body = makeMobPart(new THREE.BoxGeometry(...bodySize), color, bodyY);
   body.userData.entity = entity;
-  const head = makeMobPart(new THREE.BoxGeometry(.62,.62,.62), new THREE.Color(color).multiplyScalar(.9), 1.72);
-  head.userData.entity = entity;
-  g.add(body, head);
-  if (type === "skeleton") {
+  g.add(body);
+
+  if (type !== "slime") {
+    const head = makeMobPart(new THREE.BoxGeometry(.62,.62,.62), new THREE.Color(color).multiplyScalar(.9), 1.72);
+    head.userData.entity = entity;
+    g.add(head);
     const eyeMat = new THREE.MeshBasicMaterial({color:0x111111});
     for (const sx of [-.16,.16]) {
       const eye = new THREE.Mesh(new THREE.BoxGeometry(.08,.08,.08), eyeMat);
@@ -312,11 +373,11 @@ function spawnMob(type, pos) {
       g.add(eye);
     }
   }
+
   scene.add(g);
-  entity.group = g;
+  entity.group=g;
   mobs.push(entity);
   mobMeshes.push(...g.children);
-  showMessage(def.icon + " " + def.name + " çıktı!");
   return entity;
 }
 
@@ -345,49 +406,99 @@ function damageMob(entity, amount, source="oyuncu") {
 }
 
 let aiTick = 0;
+
+function mobGround(mob) {
+  return getGroundY(mob.group.position.x, mob.group.position.z);
+}
+
+function mobCanStep(mob, x, z) {
+  const ground = getGroundY(x,z);
+  const head = world.get(key(Math.round(x), Math.floor(ground+1.1), Math.round(z)));
+  return !head;
+}
+
+function mobGravity(mob, dt) {
+  const ground = mobGround(mob);
+  const targetY = ground + .05;
+  if (mob.group.position.y > targetY + .05 || mob.vy !== 0) {
+    mob.vy -= 18*dt;
+    mob.group.position.y += mob.vy*dt;
+    if (mob.group.position.y <= targetY) {
+      mob.group.position.y=targetY;
+      mob.vy=0;
+    }
+  } else {
+    mob.group.position.y=targetY;
+    mob.vy=0;
+  }
+}
+
+function mobJump(mob) {
+  if (mob.vy === 0) mob.vy=7;
+}
+
 function updateMobs(dt) {
   aiTick -= dt;
   if (aiTick > 0) return;
-  aiTick = .18;
+  aiTick = .12;
 
   for (const mob of [...mobs]) {
-    if (mob.dead) continue;
-    mob.attackCooldown = Math.max(0, mob.attackCooldown - .18);
+    if (mob.dead || !mob.group) continue;
 
+    mob.attackCooldown=Math.max(0,mob.attackCooldown-.12);
+    mob.wander=Math.max(0,mob.wander-.12);
+    mobGround(mob);
+    mobGravity(mob, .12);
+
+    let target=null, best=999;
     if (mob.hostile) {
-      let best = null, bestDist = 999;
       for (const other of mobs) {
-        if (other === mob || other.dead) continue;
-        const d = mob.group.position.distanceTo(other.group.position);
-        if (d < bestDist) { best = other; bestDist = d; }
+        if (other===mob || other.dead || !other.group) continue;
+        const d=mob.group.position.distanceTo(other.group.position);
+        if (d<best && d<14) { best=d; target=other; }
       }
-      mob.target = bestDist < 13 ? best : null;
-    } else {
-      mob.target = null;
     }
 
-    const p = mob.group.position;
-    if (mob.target && mob.target.group) {
-      const t = mob.target.group.position;
-      const dx = t.x-p.x, dz=t.z-p.z;
-      const dist = Math.hypot(dx,dz);
-      if (dist > 1.45) {
-        p.x += (dx/dist) * mob.speed * .18;
-        p.z += (dz/dist) * mob.speed * .18;
-        mob.group.rotation.y = Math.atan2(dx,dz);
-      } else if (mob.attackCooldown <= 0) {
-        damageMob(mob.target, mob.type === "skeleton" ? 5 : 7, mob.type);
-        mob.attackCooldown = .9;
+    mob.target=target;
+    const p=mob.group.position;
+
+    if (target) {
+      const t=target.group.position;
+      const dx=t.x-p.x, dz=t.z-p.z;
+      const dist=Math.max(.001,Math.hypot(dx,dz));
+
+      if (dist>1.45) {
+        const nx=p.x+(dx/dist)*mob.speed*.12;
+        const nz=p.z+(dz/dist)*mob.speed*.12;
+        if (mobCanStep(mob,nx,nz)) {
+          p.x=nx; p.z=nz;
+        } else {
+          mobJump(mob);
+        }
+        mob.group.rotation.y=Math.atan2(dx,dz);
+      } else if (mob.attackCooldown<=0) {
+        damageMob(target,mob.damage,mob.type);
+        mob.attackCooldown=mob.type==="skeleton" ? 1.05 : .85;
       }
     } else if (!mob.hostile) {
-      mob.wander -= .18;
-      if (mob.wander <= 0) { mob.wander = 2 + Math.random()*3; mob.group.rotation.y = Math.random()*Math.PI*2; }
-      p.x += Math.sin(mob.group.rotation.y) * mob.speed * .05;
-      p.z += Math.cos(mob.group.rotation.y) * mob.speed * .05;
+      if (mob.wander<=0) {
+        mob.wander=2+Math.random()*3;
+        mob.group.rotation.y=Math.random()*Math.PI*2;
+      }
+      const nx=p.x+Math.sin(mob.group.rotation.y)*mob.speed*.06;
+      const nz=p.z+Math.cos(mob.group.rotation.y)*mob.speed*.06;
+      if (mobCanStep(mob,nx,nz)) { p.x=nx; p.z=nz; }
     }
-    p.x = THREE.MathUtils.clamp(p.x, -23, 23);
-    p.z = THREE.MathUtils.clamp(p.z, -23, 23);
-    p.y = terrainY(p.x,p.z);
+
+    p.x=THREE.MathUtils.clamp(p.x,-23,23);
+    p.z=THREE.MathUtils.clamp(p.z,-23,23);
+
+    if (p.y < -5) {
+      removeMob(mob);
+      continue;
+    }
+
+    if (mob.group.scale.x < .999) mob.group.scale.setScalar(1);
   }
 }
 
@@ -399,7 +510,11 @@ function performAction(button) {
   const entity = hitEntity();
 
   if (button === 0) {
-    if (entity) { damageMob(entity, 8); return; }
+    if (entity) {
+      const damage = hotbarItems[selected].kind === "tool" ? 12 : 8;
+      damageMob(entity, damage);
+      return;
+    }
     if (worldHit) {
       if (removeBlockMesh(worldHit.object)) showMessage("Blok kırıldı.");
     }
@@ -450,6 +565,49 @@ function updatePlayer(dt) {
   camera.position.z = THREE.MathUtils.clamp(camera.position.z, -30, 30);
 }
 
+function saveWorld() {
+  try {
+    const data = [...world.values()].map(m => {
+      const b=m.userData.block; return [b.x,b.y,b.z,b.type];
+    });
+    localStorage.setItem("erdemcraft-save",JSON.stringify(data));
+    showMessage("💾 Dünya kaydedildi.");
+  } catch {
+    showMessage("⚠️ Kayıt başarısız.");
+  }
+}
+
+function loadWorld() {
+  try {
+    const data=JSON.parse(localStorage.getItem("erdemcraft-save")||"null");
+    if (!Array.isArray(data)) { showMessage("ℹ️ Kayıt bulunamadı."); return; }
+    for (const mesh of [...worldMeshes]) {
+      if (mesh.userData.block?.y>0) removeBlockMesh(mesh);
+    }
+    for (const [x,y,z,type] of data) addBlock(x,y,z,type);
+    showMessage("📂 Dünya yüklendi.");
+  } catch {
+    showMessage("⚠️ Kayıt okunamadı.");
+  }
+}
+
+function updateSky(t) {
+  const phase=(t*.035)%(Math.PI*2);
+  const daylight=THREE.MathUtils.clamp((Math.sin(phase)+.25)/1.25,.12,1);
+  sun.position.set(Math.cos(phase)*38,Math.sin(phase)*38+12,18);
+  sun.intensity=.5+daylight*2;
+  hemi.intensity=.7+daylight*1.4;
+  const sky=new THREE.Color(0x101829).lerp(new THREE.Color(0x86c8f3),daylight);
+  scene.background.copy(sky);
+  scene.fog.color.copy(sky);
+}
+
+function updateHUD() {
+  const d=itemLabel(hotbarItems[selected]);
+  const el=document.getElementById("stats");
+  if (el) el.textContent="Moblar: "+mobs.length+"/120 • Seçili: "+d.icon+" "+d.name;
+}
+
 function showMessage(text) {
   const el = document.getElementById("message");
   el.textContent = text;
@@ -461,6 +619,11 @@ function showMessage(text) {
 const start = document.getElementById("start-screen");
 document.getElementById("play").onclick = () => controls.lock();
 
+const demoY = getGroundY(-1,-9) + .05;
+spawnMob("zombie", new THREE.Vector3(-2,demoY,-9));
+spawnMob("skeleton", new THREE.Vector3(2,demoY,-9));
+spawnMob("sheep", new THREE.Vector3(0,getGroundY(0,-2)+.05,-2));
+
 addEventListener("resize", () => {
   camera.aspect = innerWidth/innerHeight;
   camera.updateProjectionMatrix();
@@ -470,9 +633,14 @@ addEventListener("resize", () => {
 function animate() {
   requestAnimationFrame(animate);
   const dt = Math.min(clock.getDelta(), .05);
+  elapsed += dt;
   updatePlayer(dt);
   updateMobs(dt);
+  updateSky(elapsed);
+  updateHUD();
   if (controls.isLocked) updateSelection();
   renderer.render(scene,camera);
 }
+
+let elapsed = 0;
 animate();
