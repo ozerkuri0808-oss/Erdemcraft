@@ -2,40 +2,61 @@
 <html lang="tr">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Erdemcraft — Creative Voxel Sandbox</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Erdemcraft — Creative Beta</title>
   <link rel="stylesheet" href="./style.css">
 </head>
 <body>
   <div id="hud">
-    <div class="brand">⛏️ ERDEMCRAFT <span>CREATIVE</span></div>
-    <div id="status">Fareyi kilitlemek için ekrana tıkla.</div>
-    <div class="help">WASD hareket · Space/Shift uç · Sol tık kır/saldır · Sağ tık koy/yumurtla · E envanter · 1-9 hotbar</div>
-    <div id="stats">Moblar: 0/120</div>
+    <div class="brand"><span class="brand-icon">⛏</span> ERDEMCRAFT <b>BETA</b></div>
+    <div id="status">Hazırlanıyor...</div>
+    <div id="stats">Dünya kuruluyor...</div>
+    <div id="help">WASD hareket · Space/Shift uç · Sol tık kır/vur · Sağ tık koy/çıkar · E envanter</div>
   </div>
 
-  <div id="crosshair">+</div>
+  <div id="top-actions">
+    <button id="save-btn">💾</button>
+    <button id="load-btn">📂</button>
+    <button id="reset-btn">↻</button>
+  </div>
+
+  <div id="crosshair"><span></span></div>
+  <div id="target-name"></div>
+  <div id="message"></div>
 
   <div id="hotbar" aria-label="Hotbar"></div>
 
   <div id="inventory" class="hidden">
     <div class="panel">
-      <div class="panel-title">🎒 CREATIVE ENVANTER</div>
+      <div class="panel-head">
+        <div>
+          <div class="eyebrow">CREATIVE MODE</div>
+          <div class="panel-title">🎒 Erdemcraft Envanteri</div>
+        </div>
+        <button id="close-inventory" class="icon-button">✕</button>
+      </div>
+      <div class="panel-sub">Bir eşya seç ve hotbar yuvasına gönder.</div>
       <div id="inventory-grid"></div>
-      <button id="close-inventory">Kapat (E)</button>
+      <div class="panel-foot">E ile kapat · 1–9 hotbar · P kaydet · O yükle · R yeni dünya</div>
     </div>
   </div>
 
   <div id="start-screen">
-    <div class="card">
-      <h1>⛏️ ERDEMCRAFT</h1>
-      <p>Minecraft tarzı özgün bir Creative voxel sandbox.</p>
-      <p class="small">Blokları kır, yeni bloklar koy, spawn egg ile yaratıkları spamle. Düşman yaratıklar birbirlerine saldırabilir.</p>
-      <button id="play">OYUNA GİR</button>
+    <div class="start-backdrop"></div>
+    <div class="start-card">
+      <div class="logo-orb">⛏</div>
+      <div class="eyebrow">ORIGINAL VOXEL SANDBOX</div>
+      <h1>ERDEMCRAFT <span>CREATIVE BETA</span></h1>
+      <p class="lead">Özgün blok dünyası. Sınırsız Creative. Mob AI. Arena çukuru.</p>
+      <div class="feature-row">
+        <div>🌲 <span>Yaşayan dünya</span></div>
+        <div>👾 <span>Mob AI</span></div>
+        <div>🧱 <span>Creative</span></div>
+      </div>
+      <button id="play">OYUNA GİR <span>→</span></button>
+      <div class="start-tip">Fareyi oyuna kilitlemek için butona bas. Sonra ESC ile bırakabilirsin.</div>
     </div>
   </div>
-
-  <div id="message"></div>
 
   <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js"}}</script>
   <script type="module" src="./game.js"></script>
