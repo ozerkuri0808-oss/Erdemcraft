@@ -778,20 +778,27 @@ function eye(g,x,y,z){
 }
 
 function addEnergyCaster(g){
-  const bow=new THREE.Group();
-  bow.userData.caster=true;
-  const wood=new THREE.MeshLambertMaterial({color:0x8b5a34});
-  const curveTop=new THREE.Mesh(new THREE.BoxGeometry(.08,.58,.08),wood);
-  curveTop.rotation.z=-.38;curveTop.position.y=.28;
-  const curveBottom=curveTop.clone();curveBottom.rotation.z=.38;curveBottom.position.y=-.28;
-  const grip=new THREE.Mesh(new THREE.BoxGeometry(.09,.22,.09),wood);
-  const string=new THREE.Mesh(new THREE.BoxGeometry(.018,.7,.018),new THREE.MeshBasicMaterial({color:0xe9e9e9}));
-  string.position.z=.04;
-  bow.add(curveTop,curveBottom,grip,string);
-  bow.position.set(.68,1.16,.12);
-  bow.rotation.z=-.06;
-  g.add(bow);
-  return bow;
+  const caster=new THREE.Group();
+  caster.userData.caster=true;
+  const staffMat=new THREE.MeshLambertMaterial({color:0x6d4aa0});
+  const crystalMat=new THREE.MeshBasicMaterial({color:0x7ef0db});
+  const staff=new THREE.Mesh(new THREE.CylinderGeometry(.055,.075,.78,8),staffMat);
+  staff.position.y=.32;
+  caster.add(staff);
+  const crystal=new THREE.Mesh(new THREE.OctahedronGeometry(.16,0),crystalMat);
+  crystal.position.y=.78;
+  caster.add(crystal);
+  const ring=new THREE.Mesh(
+    new THREE.TorusGeometry(.22,.025,8,20),
+    new THREE.MeshBasicMaterial({color:0x9effec,transparent:true,opacity:.72})
+  );
+  ring.rotation.x=Math.PI/2;
+  ring.position.y=.78;
+  caster.add(ring);
+  caster.position.set(.68,1.03,.08);
+  caster.rotation.z=-.06;
+  g.add(caster);
+  return caster;
 }
 
 function makeHumanoid(type,color){
