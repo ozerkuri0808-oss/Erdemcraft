@@ -1261,9 +1261,8 @@ function performAction(button){
 
     if(item.kind==="tool"){
       if(item.id==="energy"&&target){
-        // Player bow has a simple visible shot.
         const fake={group:{position:camera.position.clone()},damage:8,type:"player"};
-        shootArrow(fake,target);
+        shootEnergy(fake,target);
         showMessage("✨ Enerji atıldı!");
       }
       return;
