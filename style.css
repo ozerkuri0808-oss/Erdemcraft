@@ -11,6 +11,7 @@ canvas{display:block}
 .brand span{font-size:11px;background:#2d9cdb;border-radius:5px;padding:3px 6px;margin-left:6px}
 #status{margin-top:6px;font-size:13px}
 .help{margin-top:4px;font-size:11px;opacity:.85;max-width:850px}
+#stats{margin-top:5px;font-size:11px;color:#e4eef4}
 #crosshair{position:fixed;z-index:10;left:50%;top:50%;transform:translate(-50%,-50%);font-size:25px;font-weight:700;color:#fff;text-shadow:0 1px 4px #000;pointer-events:none}
 #hotbar{position:fixed;z-index:20;left:50%;bottom:18px;transform:translateX(-50%);display:flex;gap:5px;padding:7px;background:#111a;border:1px solid var(--border);border-radius:10px;backdrop-filter:blur(5px)}
 .slot{position:relative;width:58px;height:58px;border:2px solid #ffffff35;border-radius:8px;background:#232833dd;display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none}
