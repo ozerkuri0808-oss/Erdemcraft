@@ -60,6 +60,15 @@
 
   <script>
     window.ERDEMCRAFT_BOOT = { threeReady: false, gameStarted: false };
+    window.addEventListener("error", function(event) {
+      if (window.ERDEMCRAFT_BOOT.gameStarted) return;
+      const msg = event.error?.message || event.message || "Bilinmeyen başlangıç hatası";
+      window.showErdemcraftFallback?.(msg);
+    });
+    window.addEventListener("unhandledrejection", function(event) {
+      if (window.ERDEMCRAFT_BOOT.gameStarted) return;
+      window.showErdemcraftFallback?.(event.reason?.message || String(event.reason));
+    });
     window.showErdemcraftFallback = function(message) {
       document.getElementById("start-screen")?.classList.add("hidden");
       const status = document.getElementById("status");
