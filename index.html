@@ -58,7 +58,37 @@
     </div>
   </div>
 
-  <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js"}}</script>
-  <script type="module" src="./game.js"></script>
+  <script>
+    window.ERDEMCRAFT_BOOT = { threeReady: false, gameStarted: false };
+    window.showErdemcraftFallback = function(message) {
+      document.getElementById("start-screen")?.classList.add("hidden");
+      const status = document.getElementById("status");
+      if (status) status.textContent = "⚠️ Güvenli harita modu: " + (message || "3D motor yüklenemedi.");
+      const canvas = document.getElementById("fallback-world");
+      if (canvas) {
+        canvas.style.display = "block";
+        const ctx = canvas.getContext("2d");
+        const w = canvas.width = innerWidth;
+        const h = canvas.height = innerHeight;
+        ctx.fillStyle = "#76b956"; ctx.fillRect(0,0,w,h);
+        ctx.fillStyle = "#8fd8f4"; ctx.fillRect(0,0,w,h*0.42);
+        const tile = 26;
+        for (let y=0; y<Math.ceil(h*0.58/tile)+2; y++) {
+          for (let x=0; x<Math.ceil(w/tile)+2; x++) {
+            const wave = Math.sin(x*.65+y*.82)*9;
+            ctx.fillStyle = y%3===0 ? "#69a951" : y%3===1 ? "#8b633f" : "#70777b";
+            ctx.fillRect(x*tile, h*.42+y*tile+wave, tile+1, tile+1);
+          }
+        }
+        ctx.fillStyle="#1f2933"; ctx.font="900 24px system-ui"; ctx.fillText("ERDEMCRAFT — GÜVENLİ HARİTA",20,42);
+        ctx.fillStyle="#ffffff"; ctx.font="600 14px system-ui"; ctx.fillText("3D motor yüklenemedi; bu ekran oyunun açıldığını doğrular.",20,68);
+      }
+    };
+  </script>
+  <canvas id="fallback-world" style="display:none;position:fixed;inset:0;width:100%;height:100%;z-index:5"></canvas>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.min.js"
+          onload="window.ERDEMCRAFT_BOOT.threeReady=true"
+          onerror="window.showErdemcraftFallback('Three.js CDN yüklenemedi.')"></script>
+  <script src="./game.js"></script>
 </body>
 </html>
