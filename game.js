@@ -57,7 +57,8 @@ document.addEventListener("mousemove", (e) => {
   camera.rotation.x = pitch;
 });
 
-scene.add(new THREE.HemisphereLight(0xddeeff, 0x334422, 2.0));
+const hemi = new THREE.HemisphereLight(0xddeeff, 0x334422, 2.0);
+scene.add(hemi);
 const sun = new THREE.DirectionalLight(0xffffff, 2.3);
 sun.position.set(20, 35, 8);
 sun.castShadow = true;
