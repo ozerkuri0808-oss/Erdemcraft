@@ -1,28 +1,28 @@
 # ⛏️ Erdemcraft
 
-Minecraft'tan esinlenen, özgün içeriklerle hazırlanmış tarayıcı tabanlı Creative voxel sandbox.
+**Erdemcraft Creative Beta** — özgün içeriklerle hazırlanmış, tarayıcıda çalışan voxel sandbox.
 
-## 🎮 Özellikler
-- Creative uçuş modu
-- Blok kırma ve blok koyma
-- Hotbar + Creative envanter
-- Zombi, iskelet, koyun ve inek spawn egg'leri
-- Sağ tık basılı tutulduğunda hızlı yaratık spamleme
-- Oyuncunun yaratıklara saldırabilmesi
-- Hostile yaratıkların yakındaki diğer yaratıklara saldıran basit AI sistemi
-- Basit prosedürel arazi ve ağaçlar
-- GitHub Pages ile yayınlanabilir
+## 🌍 Beta'da neler var?
 
-## 🕹️ Kontroller
-- **WASD:** hareket
-- **Space:** yukarı uç
-- **Shift:** aşağı uç / hızlı hareket
-- **Sol tık:** blok kır / yaratığa saldır
-- **Sağ tık:** blok koy / spawn egg
-- **E:** Creative envanter
-- **1-9:** hotbar seçimi
+- Büyük prosedürel voxel dünya, ağaçlar, göl, yollar ve gece/gündüz döngüsü
+- Creative uçuş sistemi ve serbest kamera
+- Blok kırma, blok koyma ve yerleştirme önizlemesi
+- Gelişmiş Creative envanteri + hotbar
+- 5 farklı yaratık: zombi, iskelet, koyun, inek, slime
+- Hostile mob AI, mob-vs-mob çatışmaları ve iskelet menzilli saldırısı
+- Oyuncunun moblara geri itme etkili Creative saldırısı
+- Merkezi arena ve derin çukur
+- Sağ tık basılı tutulduğunda hızlı spawn egg sistemi
+- Darbe parçacıkları, HP barları, yumuşak animasyonlar ve gölgeler
+- Dünya kaydet/yükle + yeni dünya
+- GitHub Pages ile otomatik yayın
 
-Oyun tarayıcı içinde çalışır ve harici Minecraft varlıkları kullanmaz.
+## 🎮 Kontroller
 
+**WASD** hareket · **Space** yukarı uç · **Shift** aşağı/in hızlı hareket · **Sol tık** blok kır / mobu geri it · **Sağ tık** blok koy / spawn egg · **E** envanter · **1–9 / mouse wheel** seçim · **P** kaydet · **O** yükle · **R** yeni dünya · **ESC** fareyi bırak
 
-> Deployment refresh: GitHub Pages is configured through `.github/workflows/pages.yml`.
+## 🧪 Beta notu
+
+Oyun Minecraft'ın dosyalarını, modellerini veya özel kaynaklarını kullanmaz. Erdemcraft tamamen kendi dünya, blok, mob ve arayüz koduyla geliştirilen özgün bir tarayıcı oyunudur.
+
+Oyunu açtıktan sonra yeni sürüm görünmezse **Ctrl+F5** ile sayfayı yenilemek önerilir.
