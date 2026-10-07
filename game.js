@@ -1,5 +1,4 @@
 import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js";
-import { PointerLockControls } from "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/controls/PointerLockControls.js";
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x87ceeb);
@@ -15,7 +14,48 @@ renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 document.body.prepend(renderer.domElement);
 
-const controls = new PointerLockControls(camera, document.body);
+let locked = false;
+let yaw = 0;
+let pitch = 0;
+
+const controls = {
+  get isLocked() { return locked; },
+  lock() {
+    renderer.domElement.requestPointerLock();
+  },
+  unlock() {
+    if (document.pointerLockElement) document.exitPointerLock();
+    locked = false;
+  },
+  moveForward(distance) {
+    camera.position.x += Math.sin(yaw) * distance;
+    camera.position.z -= Math.cos(yaw) * distance;
+  },
+  moveRight(distance) {
+    camera.position.x += Math.cos(yaw) * distance;
+    camera.position.z += Math.sin(yaw) * distance;
+  }
+};
+
+document.addEventListener("pointerlockchange", () => {
+  locked = document.pointerLockElement === renderer.domElement;
+  if (locked) {
+    start.classList.add("hidden");
+    document.getElementById("status").textContent = "CREATIVE aktif — uçabilir ve sınırsız blok/yumurta kullanabilirsin.";
+  } else {
+    document.getElementById("status").textContent = "Oyun duraklatıldı. Devam etmek için ekrana tıkla.";
+  }
+});
+
+document.addEventListener("mousemove", (e) => {
+  if (!locked) return;
+  yaw -= e.movementX * 0.0025;
+  pitch -= e.movementY * 0.0025;
+  pitch = THREE.MathUtils.clamp(pitch, -Math.PI / 2 + 0.05, Math.PI / 2 - 0.05);
+  camera.rotation.order = "YXZ";
+  camera.rotation.y = yaw;
+  camera.rotation.x = pitch;
+});
 
 scene.add(new THREE.HemisphereLight(0xddeeff, 0x334422, 2.0));
 const sun = new THREE.DirectionalLight(0xffffff, 2.3);
@@ -420,13 +460,6 @@ function showMessage(text) {
 
 const start = document.getElementById("start-screen");
 document.getElementById("play").onclick = () => controls.lock();
-controls.addEventListener("lock", () => {
-  start.classList.add("hidden");
-  document.getElementById("status").textContent = "CREATIVE aktif — uçabilir ve sınırsız blok/yumurta kullanabilirsin.";
-});
-controls.addEventListener("unlock", () => {
-  document.getElementById("status").textContent = "Oyun duraklatıldı. Devam etmek için ekrana tıkla.";
-});
 
 addEventListener("resize", () => {
   camera.aspect = innerWidth/innerHeight;
