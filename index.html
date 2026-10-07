@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Erdemcraft — Creative Voxel Sandbox</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <div id="hud">
+    <div class="brand">⛏️ ERDEMCRAFT <span>CREATIVE</span></div>
+    <div id="status">Fareyi kilitlemek için ekrana tıkla.</div>
+    <div class="help">WASD hareket · Space/Shift uç · Sol tık kır/saldır · Sağ tık koy/yumurtla · E envanter · 1-9 hotbar</div>
+  </div>
+
+  <div id="crosshair">+</div>
+
+  <div id="hotbar" aria-label="Hotbar"></div>
+
+  <div id="inventory" class="hidden">
+    <div class="panel">
+      <div class="panel-title">🎒 CREATIVE ENVANTER</div>
+      <div id="inventory-grid"></div>
+      <button id="close-inventory">Kapat (E)</button>
+    </div>
+  </div>
+
+  <div id="start-screen">
+    <div class="card">
+      <h1>⛏️ ERDEMCRAFT</h1>
+      <p>Minecraft tarzı özgün bir Creative voxel sandbox.</p>
+      <p class="small">Blokları kır, yeni bloklar koy, spawn egg ile yaratıkları spamle. Düşman yaratıklar birbirlerine saldırabilir.</p>
+      <button id="play">OYUNA GİR</button>
+    </div>
+  </div>
+
+  <div id="message"></div>
+
+  <script type="module" src="./game.js"></script>
+</body>
+</html>
