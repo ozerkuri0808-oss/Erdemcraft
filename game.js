@@ -472,6 +472,10 @@ function getGroundY(x,z){
   return 1;
 }
 
+function terrainY(x,z){
+  return getGroundY(x,z)+0.04;
+}
+
 function lakeAt(x,z){
   const dx=x-13,dz=z-11;
   return dx*dx+dz*dz<75;
