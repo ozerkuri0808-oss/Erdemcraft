@@ -1,5 +1,3 @@
-import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js";
-
 /* =========================================================
    ERDEMCRAFT — CREATIVE BETA 2
    Original voxel sandbox. Inspired by the genre, not using
