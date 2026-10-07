@@ -6,6 +6,7 @@
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(76, innerWidth / innerHeight, 0.05, 220);
+scene.fog = new THREE.Fog(0x8fd6f6, 28, 92);
 camera.position.set(0, 11, 18);
 camera.rotation.order = "YXZ";
 
@@ -513,8 +514,8 @@ function noise2(x,z){
 }
 
 function getGroundY(x,z){
-  const cx=THREE.MathUtils.clamp(Math.round(x),-32,32);
-  const cz=THREE.MathUtils.clamp(Math.round(z),-32,32);
+  const cx=THREE.MathUtils.clamp(Math.round(x),-18,18);
+  const cz=THREE.MathUtils.clamp(Math.round(z),-18,18);
   for(let y=30;y>=0;y--){
     const m=world.get(key(cx,y,cz));
     if(m&&m.userData.block?.type!=="leaves"&&m.userData.block?.type!=="glass")return y+1;
@@ -577,7 +578,7 @@ function buildWorld(){
   portalGroups.length=0;
   portals.length=0;
 
-  const radius=31;
+  const radius=18;
   for(let x=-radius;x<=radius;x++){
     for(let z=-radius;z<=radius;z++){
       const h=heightAt(x,z);
@@ -1210,8 +1211,8 @@ function updatePlayer(dt){
   if(keys.Space)camera.position.y+=8.5*dt;
   if(sprint)camera.position.y-=8.5*dt;
 
-  camera.position.x=THREE.MathUtils.clamp(camera.position.x,-33,33);
-  camera.position.z=THREE.MathUtils.clamp(camera.position.z,-33,33);
+  camera.position.x=THREE.MathUtils.clamp(camera.position.x,-20,20);
+  camera.position.z=THREE.MathUtils.clamp(camera.position.z,-20,20);
   camera.position.y=THREE.MathUtils.clamp(camera.position.y,1.3,45);
 
   const moving=keys.KeyW||keys.KeyA||keys.KeyS||keys.KeyD;
@@ -1385,7 +1386,7 @@ function updateSky(){
   const sky=day<.25?skyNight.clone().lerp(warm,day/.25):warm.clone().lerp(skyDay,(day-.25)/.75);
 
   scene.background.copy(sky);
-  scene.fog=new THREE.Fog(sky,35,118);
+  scene.fog.color.copy(sky);
   sun.position.set(Math.cos(phase)*44,Math.sin(phase)*44+11,18);
   sun.intensity=.3+day*2.35;
   hemi.intensity=.5+day*1.35;
