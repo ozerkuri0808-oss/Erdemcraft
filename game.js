@@ -546,7 +546,12 @@ function toggleInventory(force) {
   const inv=document.getElementById("inventory");
   const show=typeof force==="boolean"?force:inv.classList.contains("hidden");
   inv.classList.toggle("hidden",!show);
-  if(show) controls.unlock();
+  if(show) {
+    controls.unlock();
+  } else if(document.getElementById("start-screen").classList.contains("hidden")) {
+    // Envanter kapanınca kamera/fare kontrolünü otomatik geri al.
+    setTimeout(() => controls.lock(), 0);
+  }
 }
 
 renderHotbar();
@@ -556,7 +561,10 @@ const keys={};
 addEventListener("keydown",e=>{
   keys[e.code]=true;
   if(e.code==="KeyE"){e.preventDefault();toggleInventory();}
-  if(e.code==="Escape"){document.getElementById("inventory").classList.add("hidden");}
+  if(e.code==="Escape" && !document.getElementById("inventory").classList.contains("hidden")){
+    e.preventDefault();
+    toggleInventory(false);
+  }
   if(/Digit[1-9]/.test(e.code)){
     selected=THREE.MathUtils.clamp(Number(e.code.slice(-1))-1,0,hotbarItems.length-1);
     renderHotbar();
