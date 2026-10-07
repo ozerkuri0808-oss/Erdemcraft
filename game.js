@@ -254,6 +254,7 @@ const terrainHeights = new Map();
 const mobs = [];
 const mobMeshes = [];
 const particles = [];
+let cameraBobOffset = 0;
 const projectiles = [];
 const waterMeshes = [];
 const arenaParts = [];
@@ -401,7 +402,8 @@ function getGroundY(x,z) {
   const cx=THREE.MathUtils.clamp(Math.round(x),-28,28);
   const cz=THREE.MathUtils.clamp(Math.round(z),-28,28);
   for (let y=28;y>=0;y--) {
-    if (world.get(key(cx,y,cz))) return y+1;
+    const mesh = world.get(key(cx,y,cz));
+    if (mesh && mesh.userData.block?.type !== "leaves") return y+1;
   }
   return 1;
 }
@@ -1022,7 +1024,12 @@ function updatePlayer(dt) {
   const moving=keys.KeyW||keys.KeyA||keys.KeyS||keys.KeyD;
   if(moving){
     bobTime+=dt*(sprint?11:8);
-    camera.position.y+=Math.sin(bobTime)*.012;
+    const nextBob=Math.sin(bobTime)*.025;
+    camera.position.y += nextBob-cameraBobOffset;
+    cameraBobOffset=nextBob;
+  } else if(cameraBobOffset!==0){
+    camera.position.y -= cameraBobOffset;
+    cameraBobOffset=0;
   }
 }
 
@@ -1172,8 +1179,9 @@ function spawnDemoMobs() {
     const y=terrainY(x,z);
     spawnMob(type,new THREE.Vector3(x+.5,y,z+.5),true);
   }
-  // A second battle starts further away so the world feels alive.
-  spawnMob("zombie",14,undefined);
+  // A second small battle starts near the lake so the world feels alive.
+  spawnMob("zombie",new THREE.Vector3(13.5,terrainY(13,12),12.5),true);
+  spawnMob("slime",new THREE.Vector3(15.5,terrainY(15,12),12.5),true);
 }
 
 function updateHUD() {
